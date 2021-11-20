@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="apple-mobile-web-app-title" content="济南大学" />
+		<title>
+			济南大学返校系统
+		</title>
+		<link rel="stylesheet" type="text/css" href="./css/access.css" />
+		<link rel="stylesheet" type="text/css" href="./css/font.css" />
+		<script>
+			var door_status = 0;
+			function dateFormat(fmt, date_) {
+				let ret;
+				const opt = {
+					"Y+": date_.getFullYear().toString(),
+					"m+": (date_.getMonth() + 1).toString(),
+					"d+": date_.getDate().toString(),
+					"H+": date_.getHours().toString(),
+					"M+": date_.getMinutes().toString(),
+					"S+": date_.getSeconds().toString()
+				};
+				for (let k in opt) {
+					ret = new RegExp("(" + k + ")").exec(fmt);
+					if (ret) {
+						fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+					};
+				};
+				return fmt;
+			}
+			function init() {
+				var date_ = new Date();
+				document.getElementById("name").innerHTML = "姓名";
+				document.getElementById("College").innerHTML = "学院";
+				document.getElementById("class").innerHTML = "班级";
+				document.getElementById("student").innerHTML = "学号";
+				document.getElementById("sqbh").innerHTML = dateFormat("YYYYmmdd", date_).substring(2)+(1000000000+Math.ceil(Math.random()*1000000000));
+				document.getElementById("qjkssj").innerHTML = dateFormat("YYYY-mm-dd", date_);
+				document.getElementById("qjjssj").innerHTML = dateFormat("YYYY-mm-dd", date_);
+			}
+			function editInfo() {
+				var name = prompt("请输入姓名", "姓名");
+				if (name == null) return;
+				var college = prompt("请输入学院", "学院");
+				if (college == null) return;
+				var class_ = prompt("请输入班级", "班级");
+				if (class_ == null) return;
+				var number_ = prompt("请输入学号", "学号");
+				if (number_ == null) return;
+				var reason = prompt("请输入请假事由", "请假事由");
+				if (reason == null) return;
+				document.getElementById("name").innerHTML = name + "(本科生)";
+				document.getElementById("College").innerHTML = college;
+				document.getElementById("class").innerHTML = class_;
+				document.getElementById("student").innerHTML = number_;
+				document.getElementById("qjsy").innerHTML = reason;
+			}
+			function changeGender() {
+				var obj = document.getElementById("gender");
+				if (obj.style.backgroundColor != "rgb(255, 166, 49)") obj.style.backgroundColor = "#ffa631";
+				else obj.style.backgroundColor = "#047de2"
+			}
+			function changeDoor() {
+				var temp = "";
+				var leave = document.getElementById("leave");
+				var obj = document.getElementById("addressName");
+				switch (door_status) {
+					case 0:
+						temp = "进入时间：";
+						leave.style.display = "none";
+						obj.innerHTML = "扫码地点：新西门";
+						break;
+					case 1:
+						temp = "进入时间：";
+						leave.style.display = "none";
+						obj.innerHTML = "扫码地点：东南门";
+						break;
+					case 2:
+						temp = "外出时间：";
+						leave.style.display = "block";
+						obj.innerHTML = "扫码地点：新西门";
+						break;
+					case 3:
+						temp = "外出时间：";
+						leave.style.display = "block";
+						obj.innerHTML = "扫码地点：东南门";
+						break;
+					default:
+						door_status = 0;
+						return;
+				}
+				door_status = (door_status + 1) % 4;
+				document.getElementById("timeName").innerHTML = temp + dateFormat("YYYY-mm-dd HH:MM:SS", new Date());
+			}
+			function changeToYes() {
+				document.getElementById("zhengque1").style.display = "block";
+				document.getElementById("wrapper").style.display = "block";
+				document.getElementById("cuowu1").style.display = "none";
+				// TODO: change "leave"
+				changeDoor();
+			}
+			function changeToNo() {
+				document.getElementById("zhengque1").style.display = "none";
+				document.getElementById("leave").style.display = "none";
+				document.getElementById("wrapper").style.display = "none";
+				document.getElementById("cuowu1").style.display = "block";
+			}
+			function todo() {
+				alert("敬请期待!");
+			}
+		</script>
+		<script>
+			var nowTime;
+			function play() {
+				var time = new Date();
+				nowTime = "当前时间：" + time.getFullYear() + "年" + (time.getMonth() + 1) + "月" + time.getDate() + "日" + time.getHours() + "时" + time.getMinutes() + "分" + time.getSeconds() + "秒";
+				document.getElementById("times").innerHTML = nowTime
+			}
+			setInterval(play, 1000);
+		</script>
+	</head>
+	<body style="width: 100%;height: 100%;">
+		<div id="stu" style="display: block">
+			<div class="code">
+				<div id="jiangkangma" style="display: block;">
+					<div class="jiangkangma" style="margin-top: 5px;" id="background_ka">
+						<div class="jiangkangma_padding">
+							<div style="text-align: left;">
+								<span style="font-size: 16px; font-weight: 900;">
+									济南大学
+								</span>
+								<br />
+								<span style="font-size: 14px;">
+									返校健康卡
+								</span>
+							</div>
+							<div class="position_bottom">
+								<div class="left_0_bottom_0">
+									<div class="erweima" id="code">
+										<img src="data:image/png;base64,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">
+									</div>
+								</div>
+								<div class="stu_info">
+									<span id="name"></span>
+									<span id="College"></span>
+									<span id="class"></span>
+									<span style="font-size: 12px;" id="student"></span>
+								</div>
+								<div style="clear: both;">
+								</div>
+							</div>
+						</div>
+						<div class="sanjiaoxing" id="gender">
+						</div>
+					</div>
+					<p style="text-align: left; margin: 10px auto 0 auto; width: 90%; font-size: 16px;" id="times">
+					</p>
+					<div style="display: none;" id="wrapper">
+						<p style="text-align: left; margin: 10px auto 0 auto; width: 90%; font-size: 24px; font-weight: bolder;" id="addressName">
+						</p>
+						<p style="text-align: left; margin: 10px auto 0 auto; width: 90%; font-size: 24px; font-weight: bolder;" id="timeName">
+						</p>
+					</div>
+					<div id="cuowu1" style="text-align: center; margin-bottom: -10px; display: none;">
+						<img src="./img/cuowu3.png" style="width: 60%; height: 60%;" />
+						<p id="cuowuMsg" style="text-align: center; color: #FF3333;">
+							未查询到出门扫码记录，禁止进入校园！
+						</p>
+					</div>
+					<div id="leave" style="text-align: left; margin: 10px auto 0 auto; width: 90%; display: none;">
+						<p>申请编号：<span id="sqbh"></span></p>
+						<p>开始时间：<span id="qjkssj"></span></p>
+						<p>结束时间：<span id="qjjssj"></span></p>
+						<p>请假事由：<span id="qjsy"></span></p>
+					</div>
+					<div id="zhengque1" style="text-align: center; margin-bottom: -10px; display: none;">
+						<img src="./img/zhengque1.jpg" style="width: 60%; height: 60%;" />
+					</div>
+					<div id="addTemp" style="display: block">
+						<span class="button_sao" style="width: 90%; background-color: #2eabff; margin: 10px auto 0 auto;" onclick="editInfo()">
+							体温上报
+						</span>
+					</div>
+					<div>
+						<span class="button_sao" style="width: 90%; background-color: #FF8C00; margin: 10px auto 0 auto;" onclick="changeGender()">
+							体温上报记录
+						</span>
+					</div>
+					<div>
+						<span class="button_sao" style="width: 45%; display: inline-block; background-color: #047DE2; margin: 10px auto 0 auto;" onclick="changeToYes()">
+							日常外出登记
+						</span>
+						<span class="button_sao" style="width: 45%; display: inline-block; background-color: #047DE2; margin: 10px auto 0 auto;" onclick="changeToNo()">
+							节假日去向登记
+						</span>
+					</div>
+					<div>
+						<span class="button_sao" id="btnOkStu" style="width: 90%; background-color: #32CD32; margin: 10px auto 0 auto;" onclick="todo()">
+							<i class="iconfont icon-saoyisao"></i>
+							出入扫码
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<style>
+			.code {
+				text-align: center;
+			}
+			.text_span {
+				color: #FF0000;
+			}
+			.img_span {
+				width: 80%;
+				margin: 0 auto;
+			}
+			.img_span img {
+				width: 100%;
+			}
+			.sanjiaoxing {
+				position: absolute;
+				width: 100px;
+				height: 100px;
+				z-index: 100;
+				background: #047DE2;
+				right: -50px;
+				top: -50px;
+				transform: rotate(45deg);
+				-ms-transform: rotate(45deg);
+				-moz-transform: rotate(45deg);
+				-webkit-transform: rotate(45deg);
+				-o-transform: rotate(45deg);
+			}
+			.position_bottom {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+			}
+			.left_1_bottom_0 {
+				position: absolute;
+				z-index: 100;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				text-align: center;
+				font-size: 14px;
+			}
+			.stu_info {
+				float: right;
+				text-align: right;
+				font-size: 14px;
+			}
+			.stu_info span {
+				display: block;
+				padding: 2px;
+			}
+			.left_0_bottom_0 {
+				position: absolute;
+				bottom: 0;
+			}
+			.erweima {
+				width: 70px;
+				height: 70px;
+				background: #fff;
+				border-radius: 6px;
+				padding: 5px;
+			}
+			.erweima div {
+				width: 70px;
+				height: 70px;
+				border-radius: 6px;
+			}
+			.jiangkangma {
+				position: relative;
+				top: 0;
+				left: 0;
+				margin: 0 auto;
+				width: 90%;
+				height: 200px;
+				background: #0CBF73;
+				border-radius: 10px;
+				overflow: hidden;
+			}
+			.jiangkangma_padding {
+				color: #fff;
+				position: absolute;
+				width: 90%;
+				height: 180px;
+				top: 10px;
+				left: 5%;
+			}
+			#code img {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+		<script>
+			init();
+			changeToYes();
+		</script>
+	</body>
+</html>
